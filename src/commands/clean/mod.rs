@@ -1,4 +1,6 @@
 use clap::Args;
+use dirs;
+use std::fs;
 
 #[derive(Args)]
 #[group(required = true, multiple = true)]
@@ -13,7 +15,20 @@ pub struct CleanArgs {
 }
 
 fn clear_desktop() -> std::io::Result<()> {
-    // Implementation to clear desktop files
+    let desktop_path = dirs::desktop_dir().unwrap();
+
+    let desktop_contents = fs::read_dir(desktop_path)?;
+
+    for entry in desktop_contents {
+        let path = entry?.path();
+
+        if path.is_file() {
+            fs::remove_file(path)?;
+        } else {
+            println!("Skipping folder on desktop: {:?}", path);
+        }
+    }
+
     Ok(())
 }
 
