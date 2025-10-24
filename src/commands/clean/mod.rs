@@ -33,7 +33,19 @@ fn clear_desktop() -> std::io::Result<()> {
 }
 
 fn clear_downloads() -> std::io::Result<()> {
-    // Implementation to clear downloads files
+    let downloads_path = dirs::download_dir().unwrap();
+
+    let downloads_contents = fs::read_dir(downloads_path)?;
+
+    for entry in downloads_contents {
+        let path = entry?.path();
+
+        if path.is_file() {
+            fs::remove_file(path)?;
+        } else {
+            println!("Skipping folder in downloads: {:?}", path);
+        }
+    }
     Ok(())
 }
 
