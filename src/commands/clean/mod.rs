@@ -1,6 +1,7 @@
 use clap::Args;
 
 #[derive(Args)]
+#[group(required = true, multiple = true)]
 pub struct CleanArgs {
     /// Remove all files and folders on the desktop
     #[clap(long)]
