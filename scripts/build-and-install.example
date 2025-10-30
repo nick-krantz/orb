@@ -2,12 +2,13 @@
 set -euo pipefail
 
 BINARY_NAME="orb"
+DEST_DIR="REPLACE_WITH_DEST_DIR"
 
 echo "Building $BINARY_NAME..."
 cargo build --release
 
 SOURCE="target/release/$BINARY_NAME"
-DEST="/Users/nickkrantz/.local/bin/$BINARY_NAME"
+DEST="$DEST_DIR/$BINARY_NAME"
 
 echo "Installing $BINARY_NAME to $DEST..."
 cp "$SOURCE" "$DEST"
@@ -17,4 +18,4 @@ chmod +x "$DEST"
 echo "Installed successfully!"
 echo
 echo "You can now run it with: $BINARY_NAME"
-echo "(Make sure ~/usr/local/bin/ is in your PATH)"
+echo "(Make sure $DEST_DIR is in your PATH)"
