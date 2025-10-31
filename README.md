@@ -45,6 +45,7 @@ Below are the current set of commands. Run with `--help` to see available option
 - [ ] Create PR with title + ticket from branch
     - How generic can this be?
     - Can it support a local template?
+- [ ] Backup .gitconfig to obsidian
 - Create GitHub link from last commit. This will help with addressing feedback in VSCode's GH extension.
   - From within a git repo, generate a web link to the last commit. 
   - Possibly make it interactive? Choose commit?
