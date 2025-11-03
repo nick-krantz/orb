@@ -1,3 +1,4 @@
+pub mod backup_configs;
 pub mod clean;
 
 use clap::{Parser, Subcommand};
@@ -14,4 +15,6 @@ pub struct Cli {
 pub enum Commands {
     /// Clean files and folders
     Clean(clean::CleanArgs),
+    /// Move config files into obsidian markdown files to be backed up.
+    BackupConfigs,
 }

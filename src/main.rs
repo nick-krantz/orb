@@ -9,6 +9,7 @@ fn main() -> std::io::Result<()> {
 
     match cli.command {
         Commands::Clean(args) => commands::clean::run(&args)?,
+        Commands::BackupConfigs => commands::backup_configs::run()?,
     }
 
     Ok(())

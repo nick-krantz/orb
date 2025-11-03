@@ -22,14 +22,14 @@ A CLI tool for automating common system maintenance tasks.
 2. Run command with `cargo run -- [command] [options]`
    - Example: `cargo run -- clean --help`
 
-
 ## Commands
 
 Below are the current set of commands. Run with `--help` to see available options.
 
-|Command|Description|Options|Example|
-|-|-|-|-|
-|`clean`|Remove files from Desktop and/or Downloads folders (folders are skipped, only files removed)|`--desktop` `--downloads` (at least one required)|`orb clean --desktop --downloads`|
+| Command        | Description                                                                                                                                                                                                                 | Options                                           | Example                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------- |
+| `clean`        | Remove files from Desktop and/or Downloads folders (folders are skipped, only files removed)                                                                                                                                | `--desktop` `--downloads` (at least one required) | `orb clean --desktop --downloads` |
+| backup-configs | Moves configuration files from home directory into an Obsidian vault folder. Obsidian is automatically backed up to GitHub. The destination folder needs to be set using the `OBSIDIAN_CONFIG_FOLDER` environment variable. | None                                              | `orb backup-configs`              |
 
 ## Installation
 
@@ -45,7 +45,7 @@ Below are the current set of commands. Run with `--help` to see available option
 - [ ] Create PR with title + ticket from branch
     - How generic can this be?
     - Can it support a local template?
-- [ ] Backup .gitconfig to obsidian
+- [x] Backup .gitconfig to obsidian
 - Create GitHub link from last commit. This will help with addressing feedback in VSCode's GH extension.
   - From within a git repo, generate a web link to the last commit. 
   - Possibly make it interactive? Choose commit?
