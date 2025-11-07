@@ -8,7 +8,7 @@ A CLI tool for automating common system maintenance tasks.
     - [Running Locally](#running-locally)
   - [Commands](#commands)
   - [Installation](#installation)
-  - [Command Ideas](#command-ideas)
+  - [TODO / Command Ideas](#todo--command-ideas)
 
 ## Development
 
@@ -38,12 +38,13 @@ Below are the current set of commands. Run with `--help` to see available option
 3. Make script executable: `chmod +x scripts/build-and-install.sh`
 4. Run script to build and install the binary: `./scripts/build-and-install.sh`
 
-## Command Ideas
+## TODO / Command Ideas
 
 - [ ] Clear local branches
 - [ ] Create PR with title + ticket from branch
     - How generic can this be?
     - Can it support a local template?
+- [ ] Better error messaging - currently rust errors are shown to the user
 - Create GitHub link from last commit. This will help with addressing feedback in VSCode's GH extension.
   - From within a git repo, generate a web link to the last commit. 
   - Possibly make it interactive? Choose commit?
