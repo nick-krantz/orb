@@ -1,10 +1,20 @@
 use git2::Repository;
 use regex::Regex;
+use std::fs;
 use std::io::{Error, ErrorKind, Result};
+use std::process::Command;
+use url::Url;
 
 const BITWARDEN_CLIENTS_URL: &str = "https://github.com/bitwarden/clients";
 const BITWARDEN_SERVER_URL: &str = "https://github.com/bitwarden/server";
 const BITWARDEN_SDK_URL: &str = "https://github.com/bitwarden/sdk-internal";
+
+const PULL_REQUEST_TEMPLATE_PATH: &str = ".github/PULL_REQUEST_TEMPLATE.md";
+
+// This is a little hacky but the template hasn't changed in over a year. I'm taking how straight forward it is.
+const TEMPLATE_TRACKING_HEADER: &str = "## 🎟️ Tracking\n\n<!-- Paste the link to the Jira or GitHub issue or otherwise describe / point to where this change is coming from. -->";
+
+const BASE_JIRA_URL: &str = "https://bitwarden.atlassian.net/browse/";
 
 /// Determines the Bitwarden repository type based on the remote URL.
 fn get_bitwarden_repo(repo: &Repository) -> Option<String> {
@@ -41,25 +51,69 @@ fn get_ticket_from_branch(branch: &str) -> Option<String> {
         .map(|m| m.as_str().to_string().to_uppercase().replace("/", ""))
 }
 
+/// Grab the pull request template from the repo
+fn get_pull_request_template(repo: &Repository) -> String {
+    let template_path = repo.workdir().unwrap().join(PULL_REQUEST_TEMPLATE_PATH);
+
+    fs::read_to_string(template_path).unwrap()
+}
+
+fn create_pr_description(repo: &Repository, ticket: &str) -> String {
+    let jira_link = format!("{}{}", BASE_JIRA_URL, ticket);
+    let jira_link_markdown = format!("[{}]({})", ticket, jira_link);
+    let template: String = get_pull_request_template(&repo);
+
+    template.replace(
+        TEMPLATE_TRACKING_HEADER,
+        &format!("## 🎟️ Tracking\n\n{}", jira_link_markdown),
+    )
+}
+
+fn construct_pull_request_url(
+    repo_url: &str,
+    branch: &str,
+    title: &str,
+    description: &str,
+) -> Result<String> {
+    let compare_path = format!("/compare/main...{}", branch);
+    let full_url = format!("{}{}", repo_url, compare_path);
+
+    let mut url = Url::parse(&full_url)
+        .map_err(|e| Error::new(ErrorKind::InvalidInput, format!("Invalid URL: {}", e)))?;
+
+    url.query_pairs_mut()
+        .append_pair("quick_pull", "1")
+        .append_pair("title", title)
+        .append_pair("body", description);
+
+    Ok(url.to_string())
+}
+
 pub fn run() -> Result<()> {
     let repo = Repository::discover(".").map_err(|e| Error::new(ErrorKind::Other, e))?;
 
     let repo_url = get_bitwarden_repo(&repo)
         .ok_or_else(|| Error::new(ErrorKind::NotFound, "Not a recognized Bitwarden repository"))?;
 
-    println!("Repository URL: {}", repo_url);
-
     let branch_name = get_branch_name(&repo)?;
-
-    println!("Current Branch: {}", branch_name);
 
     let ticket = get_ticket_from_branch(&branch_name)
         .ok_or_else(|| Error::new(ErrorKind::NotFound, "No ticket found in branch name"))?;
 
-    println!("Ticket: {}", ticket);
-    // Create base title with ticket name
-    // Create base description from template
-    // Create PR URL with title and description from template
-    // https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/using-query-parameters-to-create-a-pull-request
+    let title = format!("[{}]", ticket);
+    let description = create_pr_description(&repo, &ticket);
+
+    let url = construct_pull_request_url(&repo_url, &branch_name, &title, &description)?;
+
+    println!("Opening a new PR for");
+    println!("  Repository: {}", repo_url);
+    println!("  Branch: {}", branch_name);
+    println!("  Ticket: {}", ticket);
+
+    Command::new("open")
+        .arg(&url)
+        .status()
+        .map_err(|e| Error::new(ErrorKind::Other, format!("Failed to open URL: {}", e)))?;
+
     Ok(())
 }

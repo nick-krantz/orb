@@ -452,6 +452,7 @@ dependencies = [
  "dirs",
  "git2",
  "regex",
+ "url",
 ]
 
 [[package]]
