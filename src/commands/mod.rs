@@ -8,6 +8,10 @@ use clap::{Parser, Subcommand};
 #[clap(name = "orb")]
 #[clap(about = "A CLI tool for miscellaneous tasks", long_about = None)]
 pub struct Cli {
+    /// Enable verbose output (shows detailed error information)
+    #[clap(short, long, global = true)]
+    pub verbose: bool,
+
     #[clap(subcommand)]
     pub command: Commands,
 }

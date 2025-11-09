@@ -1,9 +1,10 @@
 use git2::Repository;
 use regex::Regex;
 use std::fs;
-use std::io::{Error, ErrorKind, Result};
 use std::process::Command;
 use url::Url;
+
+use crate::errors::{ErrorWithContext, Result};
 
 const BITWARDEN_CLIENTS_URL: &str = "https://github.com/bitwarden/clients";
 const BITWARDEN_SERVER_URL: &str = "https://github.com/bitwarden/server";
@@ -31,13 +32,16 @@ fn get_bitwarden_repo(repo: &Repository) -> Option<String> {
 
 /// Retrieves the current branch name of the repository.
 fn get_branch_name(repo: &Repository) -> Result<String> {
-    let head = repo.head().map_err(|e| Error::new(ErrorKind::Other, e))?;
-    let shorthand = head.shorthand().ok_or_else(|| {
-        Error::new(
-            ErrorKind::Other,
-            "Failed to get branch name from repository head",
-        )
+    let head = repo.head().map_err(|e| ErrorWithContext {
+        user_message: "Unable to retrieve git head".to_string(),
+        technical_details: Some(e.message().to_string()),
     })?;
+
+    let shorthand = head.shorthand().ok_or_else(|| ErrorWithContext {
+        user_message: "Error getting branch shorthand name".to_string(),
+        technical_details: None,
+    })?;
+
     Ok(shorthand.to_string())
 }
 
@@ -78,8 +82,10 @@ fn construct_pull_request_url(
     let compare_path = format!("/compare/main...{}", branch);
     let full_url = format!("{}{}", repo_url, compare_path);
 
-    let mut url = Url::parse(&full_url)
-        .map_err(|e| Error::new(ErrorKind::InvalidInput, format!("Invalid URL: {}", e)))?;
+    let mut url = Url::parse(&full_url).map_err(|e| ErrorWithContext {
+        user_message: format!("Invalid GitHub URL: {}", full_url),
+        technical_details: Some(e.to_string()),
+    })?;
 
     url.query_pairs_mut()
         .append_pair("quick_pull", "1")
@@ -90,15 +96,22 @@ fn construct_pull_request_url(
 }
 
 pub fn run() -> Result<()> {
-    let repo = Repository::discover(".").map_err(|e| Error::new(ErrorKind::Other, e))?;
+    let repo = Repository::discover(".").map_err(|e| ErrorWithContext {
+        user_message: "GitHub repository not found".to_string(),
+        technical_details: Some(e.to_string()),
+    })?;
 
-    let repo_url = get_bitwarden_repo(&repo)
-        .ok_or_else(|| Error::new(ErrorKind::NotFound, "Not a recognized Bitwarden repository"))?;
+    let repo_url = get_bitwarden_repo(&repo).ok_or_else(|| ErrorWithContext {
+        user_message: format!("Not a recognized Bitwarden repository"),
+        technical_details: None,
+    })?;
 
     let branch_name = get_branch_name(&repo)?;
 
-    let ticket = get_ticket_from_branch(&branch_name)
-        .ok_or_else(|| Error::new(ErrorKind::NotFound, "No ticket found in branch name"))?;
+    let ticket = get_ticket_from_branch(&branch_name).ok_or_else(|| ErrorWithContext {
+        user_message: format!("No ticket found in branch name: {}", branch_name),
+        technical_details: None,
+    })?;
 
     let title = format!("[{}]", ticket);
     let description = create_pr_description(&repo, &ticket);
@@ -113,7 +126,10 @@ pub fn run() -> Result<()> {
     Command::new("open")
         .arg(&url)
         .status()
-        .map_err(|e| Error::new(ErrorKind::Other, format!("Failed to open URL: {}", e)))?;
+        .map_err(|e| ErrorWithContext {
+            user_message: format!("Failed to open url: {}", url),
+            technical_details: Some(e.to_string()),
+        })?;
 
     Ok(())
 }
