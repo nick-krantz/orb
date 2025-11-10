@@ -1,6 +1,7 @@
 pub mod backup_configs;
 pub mod bitwarden_pr;
 pub mod clean;
+pub mod colorx;
 
 use clap::{Parser, Subcommand};
 
@@ -24,4 +25,6 @@ pub enum Commands {
     BackupConfigs,
     /// Create a PR preview in GitHub for Bitwarden repositories.
     BitwardenPr,
+    /// Color conversion utility
+    ColorX,
 }

@@ -12,6 +12,7 @@ fn main() {
         Commands::Clean(args) => commands::clean::run(&args),
         Commands::BackupConfigs => commands::backup_configs::run(),
         Commands::BitwardenPr => commands::bitwarden_pr::run(),
+        Commands::ColorX => commands::colorx::run(),
     };
 
     if let Err(e) = result {
