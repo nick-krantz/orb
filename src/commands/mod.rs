@@ -26,5 +26,5 @@ pub enum Commands {
     /// Create a PR preview in GitHub for Bitwarden repositories.
     BitwardenPr,
     /// Color conversion utility
-    ColorX,
+    ColorX(colorx::ColorXArgs),
 }
