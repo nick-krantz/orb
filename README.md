@@ -7,6 +7,10 @@ A CLI tool for automating common system maintenance tasks in my own workflow. My
     - [Prerequisites](#prerequisites)
     - [Running Locally](#running-locally)
   - [Commands](#commands)
+    - [`backup-configs`](#backup-configs)
+    - [`bitwarden-pr`](#bitwarden-pr)
+    - [`clean`](#clean)
+    - [`colorx`](#colorx)
   - [Installation](#installation)
   - [TODO / Command Ideas](#todo--command-ideas)
 
@@ -26,12 +30,39 @@ A CLI tool for automating common system maintenance tasks in my own workflow. My
 
 Below are the current set of commands. Run with `--help` to see available options.
 
-| Command          | Description                                                                                                                                                                                                                                                                                                                                                                                                                       | Options                                           | Example                                                                    |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------- |
-| `backup-configs` | Moves configuration files from home directory into an Obsidian vault folder. Obsidian is automatically backed up to GitHub. The destination folder needs to be set using the `OBSIDIAN_CONFIG_FOLDER` environment variable.                                                                                                                                                                                                       | None                                              | `orb backup-configs`                                                       |
-| `bitwarden-pr`   | Opens the GitHub pull request page for a Bitwarden repository with prefilled information. This only works when a ticket number is found within the branch name. The expected branch format should follow the [contributing guidelines](https://contributing.bitwarden.com/contributing/pull-requests/#branch): `<team>/<issue-number>/<brief-description>`. The command will fail if a repo or non-bitwarden repository is found. | N/A                                               | `orb bitwarden-pr`                                                         |
-| `clean`          | Remove files from Desktop and/or Downloads folders (folders are skipped, only files removed)                                                                                                                                                                                                                                                                                                                                      | `--desktop` `--downloads` (at least one required) | `orb clean --desktop --downloads`                                          |
-| `colorx`         | Converts hex color codes to RGB and vice versa.                                                                                                                                                                                                                                                                                                                                                                                   | N/A                                               | `orb colorx #FF5733`, `orb colorx 255 87 51`, `orb colorx rgb(45, 45, 45)` |
+### `backup-configs`
+Moves configuration files from home directory into an Obsidian vault folder. Obsidian is automatically backed up to GitHub. The destination folder needs to be set using the `OBSIDIAN_CONFIG_FOLDER` environment variable.
+
+**Options:** None
+
+**Example:** `orb backup-configs`
+
+---
+
+### `bitwarden-pr`
+Opens the GitHub pull request page for a Bitwarden repository with prefilled information. This only works when a ticket number is found within the branch name. The expected branch format should follow the [contributing guidelines](https://contributing.bitwarden.com/contributing/pull-requests/#branch): `<team>/<issue-number>/<brief-description>`. The command will fail if a repo or non-bitwarden repository is found.
+
+**Options:** N/A
+
+**Example:** `orb bitwarden-pr`
+
+---
+
+### `clean`
+Remove files from Desktop and/or Downloads folders (folders are skipped, only files removed)
+
+**Options:** `--desktop` `--downloads` (at least one required)
+
+**Example:** `orb clean --desktop --downloads`
+
+---
+
+### `colorx`
+Converts hex color codes to RGB and vice versa.
+
+**Options:** N/A
+
+**Example:** `orb colorx #FF5733`, `orb colorx 255 87 51`, `orb colorx rgb(45, 45, 45)`
 
 ## Installation
 
