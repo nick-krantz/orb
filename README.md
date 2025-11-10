@@ -1,6 +1,6 @@
 # Orb
 
-A CLI tool for automating common system maintenance tasks.
+A CLI tool for automating common system maintenance tasks in my own workflow. My way of learning Rust while building something useful.
 
 - [Orb](#orb)
   - [Development](#development)
@@ -26,10 +26,12 @@ A CLI tool for automating common system maintenance tasks.
 
 Below are the current set of commands. Run with `--help` to see available options.
 
-| Command        | Description                                                                                                                                                                                                                 | Options                                           | Example                           |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------- |
-| `clean`        | Remove files from Desktop and/or Downloads folders (folders are skipped, only files removed)                                                                                                                                | `--desktop` `--downloads` (at least one required) | `orb clean --desktop --downloads` |
-| backup-configs | Moves configuration files from home directory into an Obsidian vault folder. Obsidian is automatically backed up to GitHub. The destination folder needs to be set using the `OBSIDIAN_CONFIG_FOLDER` environment variable. | None                                              | `orb backup-configs`              |
+| Command          | Description                                                                                                                                                                                                                                                                                                                                                                                                                       | Options                                           | Example                                                                    |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------- |
+| `backup-configs` | Moves configuration files from home directory into an Obsidian vault folder. Obsidian is automatically backed up to GitHub. The destination folder needs to be set using the `OBSIDIAN_CONFIG_FOLDER` environment variable.                                                                                                                                                                                                       | None                                              | `orb backup-configs`                                                       |
+| `bitwarden-pr`   | Opens the GitHub pull request page for a Bitwarden repository with prefilled information. This only works when a ticket number is found within the branch name. The expected branch format should follow the [contributing guidelines](https://contributing.bitwarden.com/contributing/pull-requests/#branch): `<team>/<issue-number>/<brief-description>`. The command will fail if a repo or non-bitwarden repository is found. | N/A                                               | `orb bitwarden-pr`                                                         |
+| `clean`          | Remove files from Desktop and/or Downloads folders (folders are skipped, only files removed)                                                                                                                                                                                                                                                                                                                                      | `--desktop` `--downloads` (at least one required) | `orb clean --desktop --downloads`                                          |
+| `colorx`         | Converts hex color codes to RGB and vice versa.                                                                                                                                                                                                                                                                                                                                                                                   | N/A                                               | `orb colorx #FF5733`, `orb colorx 255 87 51`, `orb colorx rgb(45, 45, 45)` |
 
 ## Installation
 
@@ -41,6 +43,8 @@ Below are the current set of commands. Run with `--help` to see available option
 ## TODO / Command Ideas
 
 - [ ] Clear local branches
+- [ ] Copy converted color code to clipboard automatically
+- [ ] Support alpha values in colorx command
 - Create GitHub link from last commit. This will help with addressing feedback in VSCode's GH extension.
   - From within a git repo, generate a web link to the last commit. 
   - Possibly make it interactive? Choose commit?

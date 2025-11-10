@@ -12,7 +12,7 @@ const BITWARDEN_SDK_URL: &str = "https://github.com/bitwarden/sdk-internal";
 
 const PULL_REQUEST_TEMPLATE_PATH: &str = ".github/PULL_REQUEST_TEMPLATE.md";
 
-// This is a little hacky but the template hasn't changed in over a year. I'm taking how straight forward it is.
+// This is a little hacky but the template hasn't changed in over a year. I'm hardcoding it for now.
 const TEMPLATE_TRACKING_HEADER: &str = "## 🎟️ Tracking\n\n<!-- Paste the link to the Jira or GitHub issue or otherwise describe / point to where this change is coming from. -->";
 
 const BASE_JIRA_URL: &str = "https://bitwarden.atlassian.net/browse/";
