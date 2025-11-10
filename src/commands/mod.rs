@@ -22,5 +22,6 @@ pub enum Commands {
     Clean(clean::CleanArgs),
     /// Move config files into obsidian markdown files to be backed up.
     BackupConfigs,
+    /// Create a PR preview in GitHub for Bitwarden repositories.
     BitwardenPr,
 }
